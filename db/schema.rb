@@ -10,14 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_07_212609) do
+ActiveRecord::Schema.define(version: 2019_05_08_165648) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name"
-    t.string "state"
     t.integer "population"
-    t.integer "cost_of_living"
-    t.integer "education"
+    t.integer "urban_area_id"
+  end
+
+  create_table "urban_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "state"
+    t.float "housing"
+    t.float "cost_of_living"
+    t.float "startups"
+    t.float "venture_capital"
+    t.float "travel_connectivity"
+    t.float "commute"
+    t.float "business_freedom"
+    t.float "safety"
+    t.float "healthcare"
+    t.float "education"
+    t.float "environmental_quality"
+    t.float "economy"
+    t.float "taxation"
+    t.float "internet_access"
+    t.float "leisure_and_culture"
+    t.float "tolerance"
+    t.float "outdoors"
   end
 
   create_table "user_cities", force: :cascade do |t|
@@ -27,8 +47,23 @@ ActiveRecord::Schema.define(version: 2019_05_07_212609) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "cost_of_living_preference"
-    t.integer "education_preference"
+    t.integer "housing_pref"
+    t.integer "cost_of_living_pref"
+    t.integer "startups_pref"
+    t.integer "venture_captial_pref"
+    t.integer "travel_connectivity_pref"
+    t.integer "commute_pref"
+    t.integer "business_freedom_pref"
+    t.integer "safety_pref"
+    t.integer "healthcare_pref"
+    t.integer "education_pref"
+    t.integer "environmental_quality_pref"
+    t.integer "economy_pref"
+    t.integer "taxation_pref"
+    t.integer "internet_access_pref"
+    t.integer "leisure_and_culture_pref"
+    t.integer "tolerance_pref"
+    t.integer "outdoors"
   end
 
 end
