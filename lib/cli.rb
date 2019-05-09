@@ -63,7 +63,7 @@ def main_menu(user)
         binding.pry
         if add_to_list?(city) == true
           puts "Adding #{city.name} to your list."
-          UserCity.create(user_id: user.id, city_id: city.id)
+          user.add_city_to_list(city)
         else
           puts "Okay, no problem! Returning to the main menu now."
         end
@@ -71,7 +71,7 @@ def main_menu(user)
     when 'list'
       puts 'test'
     when 'preferences'
-      puts 'STILL WORKING ON THIS!'
+      pref_list(user)
     when 'help'
       help
     when 'exit', 'quit'
@@ -209,6 +209,41 @@ def add_to_list?(city)
 end
 
 def display_current_list(user)
+
+end
+
+def pref_list(user)
+
+    pref_text = {nil => "N/A",
+      0 => "N/A",
+      1 => "Not at all important",
+      2 => "Slightly important",
+      3 => "Somewhat important",
+      4 => "Very important",
+      5 => "Absolutely Vital!"}
+
+  print <<-QOLS
+            Your Quality of Life Preferences
+  Here are your current preferences for our QoL Metrics:
+    Housing:                 #{pref_text[user.housing_pref]}
+    Cost of Living:          #{pref_text[user.cost_of_living_pref]}
+    Startups:                #{pref_text[user.startups_pref]}
+    Venture Capital:         #{pref_text[user.venture_capital_pref]}
+    Travel Connectivity:     #{pref_text[user.travel_connectivity_pref]}
+    Commute:                 #{pref_text[user.commute_pref]}
+    Business Freedom:        #{pref_text[user.business_freedom_pref]}
+    Safety:                  #{pref_text[user.safety_pref]}
+    Healthcare:              #{pref_text[user.healthcare_pref]}
+    Education:               #{pref_text[user.education_pref]}
+    Environmental Quality:   #{pref_text[user.environmental_quality_pref]}
+    Economy:                 #{pref_text[user.economy_pref]}
+    Taxation:                #{pref_text[user.taxation_pref]}
+    Internet Access:         #{pref_text[user.internet_access_pref]}
+    Leisure and Culture:     #{pref_text[user.leisure_and_culture_pref]}
+    Tolerance:               #{pref_text[user.tolerance_pref]}
+    Outdoors:                #{pref_text[user.outdoors_pref]}
+
+  QOLS
 
 end
 

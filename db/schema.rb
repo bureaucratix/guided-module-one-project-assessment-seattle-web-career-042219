@@ -47,10 +47,11 @@ ActiveRecord::Schema.define(version: 2019_05_08_165648) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
+    t.integer "outdoors"
     t.integer "housing_pref"
     t.integer "cost_of_living_pref"
     t.integer "startups_pref"
-    t.integer "venture_captial_pref"
+    t.integer "venture_capital_pref"
     t.integer "travel_connectivity_pref"
     t.integer "commute_pref"
     t.integer "business_freedom_pref"
@@ -63,7 +64,7 @@ ActiveRecord::Schema.define(version: 2019_05_08_165648) do
     t.integer "internet_access_pref"
     t.integer "leisure_and_culture_pref"
     t.integer "tolerance_pref"
-    t.integer "outdoors"
+    t.integer "outdoors_pref"
   end
 
 end
