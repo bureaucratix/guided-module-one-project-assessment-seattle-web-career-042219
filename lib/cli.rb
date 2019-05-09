@@ -20,7 +20,9 @@
 #   -- quit
 
 def welcome
+  puts "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   puts "Welcome to City Quality of Life (CQL)! What's your username?"
+  puts "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 end
 
 def get_name
@@ -39,15 +41,14 @@ end
 
 def help
   puts 'Here are the things you can do:'
-  puts '-- lookup: Look up a city / add it to your list!'
+  puts '-- find: Find a city / add it to your list!'
   puts '-- list: View your current list of cities'
-  puts '-- preferences: [[UNDER CONSTRUCTION]]'
-  puts '-- help: Display these options'
+  puts '-- preferences: View and update your personal preferences'
   puts '-- exit: Exit the application'
 end
 
 def get_city_input
-  puts 'Enter the name of a city'
+  puts 'Enter the name of a city:'
   gets.chomp
 end
 
@@ -131,9 +132,10 @@ end
 
 def display_ua_and_city_data(city)
   ua = UrbanArea.find(city.urban_area_id)
+  binding.pry
   print <<-QOLS
   #{city.name} is a city in the greater urban area of
-  #{ua.name}, #{ua.state}.
+  #{ua.name}, #{ua.state}\n  Population: #{city.population}.
 
   Here are some Quality of Life Metrics for #{ua.name}:
       Housing:                 #{ua.housing.round(2)}
@@ -166,25 +168,96 @@ def add_to_list?(city)
     elsif input.downcase == "n" || input.downcase == "no"
       return false
     else
-      puts "I didn't get that-- please enter a valid response"
+      puts "#{input} is not a valid option."
     end
   end
 end
 
 def display_current_list(user)
-   user.get_city_array.each do |c|
-     puts c.name
-   end
+    puts "\nAlright #{user.name}! Here is your current list of prospective cities:"
+     user.get_city_array.each_with_index do |c, index|
+       puts "#{index+1}. #{c.name}"
+     end
+   puts ''
 end
 
 def list_menu(user)
   puts "what would you like to do?"
+  ###Not working yet
+  puts "-- view:  View a list of your cities, and all the Metrics of each"
   puts "-- remove: Remove a city from your list."
   puts "-- delete: Delete your WHOLE list."
   puts "-- compare: Compare your cities based on a metric of your choice."
   puts "-- back: Go back to the main menu."
 
-  gets.chomp
+  loop do
+    puts "Please enter an option:"
+    repeat = false
+    input = gets.chomp
+    case input
+    when 'view'
+      puts 'Still working on the View feature!'
+      repeat = true
+    when 'remove'
+      remove_from_list_prompt(user)
+    when 'delete'
+      del = delete_prompt()
+      delete_list(user) if del == true
+    when 'compare'
+      puts "testing compare"
+      repeat = true
+    when 'back', 'exit', 'quit'
+      puts "\nOkay! Going back to the main menu."
+    else
+      puts "#{input} is not a valid option."
+      repeat = true
+    end
+    break if repeat == false
+  end
+end
+
+def remove_from_list_prompt(user)
+  system('cls')
+  user_cities = user.get_city_array
+  user_cities.each_with_index do |c, index|
+    puts "#{index+1}. #{c.name}"
+  end
+  exit_loop = false
+  loop do
+    puts "\nPlease enter the number of the city you would like to remove:\n(type 'quit' to cancel)"
+    input = gets.chomp
+    if input.to_i < user_cities.length+1 && input.to_i > 0
+      uc = user.find_user_city_by_city_id(user_cities, input)
+      UserCity.delete(uc.id)
+      puts "\nDeleting #{user_cities[input.to_i-1].name}!\nHeading back to Main Menu."
+      exit_loop = true
+      break
+    elsif input == 'quit' || input == 'exit'
+      exit_loop = true
+      break
+    else
+      puts "#{input} is not a valid option."
+    end
+    break if exit_loop == true
+  end
+end
+
+def delete_prompt()
+  puts "\n!!!!This will delete your WHOLE LIST. For real. Are you sure??"
+  loop do
+    input = gets.chomp
+    if input.downcase == "y" || input.downcase == "yes"
+      return true
+    elsif input.downcase == "n" || input.downcase == "no"
+      return false
+    else
+      puts "#{input} is not a valid option."
+    end
+  end
+end
+
+def delete_list(user)
+  UserCity.where(user_id: user.id).delete_all
 end
 
 def pref_list(user)
@@ -234,7 +307,7 @@ def pref_prompt
     elsif input == 'back' || input == 'quit' || input == 'exit'
       break
     else
-      puts "Invalid input"
+      puts "#{input} is not a valid option."
     end
   end
   return input
@@ -262,7 +335,7 @@ def pref_update(user)
         exit_loop = true
         break
       else
-        puts "invalid input"
+        puts "#{input} is not a valid option."
       end
     end
     break if exit_loop == true
@@ -273,39 +346,38 @@ end
 
 
 def main_menu(user)
-  puts
-  help
   loop do
-    puts 'Please enter an option:'
+    puts ''
+    help()
+    puts "\nPlease enter an option:"
     input = gets.chomp
-    puts ""
+    puts ''
     case input
-    when 'lookup'
+    when 'find'
       city_query = get_city_input
       city_hash = choose_city(city_query)
       city = get_city_from_api(city_hash) unless city_hash.nil?
       if city != nil
         display_ua_and_city_data(city)
         if add_to_list?(city) == true
-          puts "Adding #{city.name} to your list."
+          puts "Adding #{city.name} to your list.\n"
           user.add_city_to_list(city)
-          puts ""
-          help()
         else
-          puts "Okay, no problem! Returning to the main menu now."
-          puts ""
-          help()
+          puts "Okay, no problem! Returning to the main menu now.\n"
         end
       end
     when 'list'
-      display_current_list(user)
-      list_menu(user)
+      if user.get_city_array.length<1
+        puts "you have no cities in your list! :(\nLet's go back and add some."
+      else
+        display_current_list(user)
+        list_input = list_menu(user)
+      end
     when 'preferences'
       pref_list(user)
       input = pref_prompt()
       user = pref_update(user) if input == 'update'
       puts ""
-      help()
     when 'help'
       help()
     when 'exit', 'quit'
@@ -313,21 +385,21 @@ def main_menu(user)
       break
     else
       puts "#{input} is not a valid option."
-      help()
     end
   end
 end
 
 def run
   welcome
-  name = get_name
+  name = get_name()
+  puts ''
   existing_user = look_for_user(name)
   if !existing_user.nil?
     user = existing_user
-    puts "Welcome back #{name}!"
+    puts "Welcome back, #{name}!"
   else
     user = new_user(name)
-    puts "Hello #{name}! Welcome to City Quality of Life (CQL)!"
+    puts "Hello, #{name}! Welcome to City Quality of Life (CQL)!"
   end
   main_menu(user)
 end
