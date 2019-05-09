@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_many :cities, through: :user_cities
 
  def add_city_to_list(city)
-  UserCity.create(user_id: self.id, city_id: city.id)
+  UserCity.find_or_create_by(user_id: self.id, city_id: city.id)
  end
 
  def update_pref(preference_name, new_value)
@@ -11,7 +11,12 @@ class User < ActiveRecord::Base
  end
 
  def get_city_array
-   City.left_outer_joins(:user_cities).select('cities.name').where('user_cities.user_id = ?', self.id)
+   City.left_outer_joins(:user_cities).where('user_cities.user_id = ?', self.id)
  end
+
+  def find_user_city_by_city_id(city_array, city_index)
+    UserCity.find_by(user_id: self.id, city_id: city_array[city_index.to_i-1].id)
+  end
+
 
 end
