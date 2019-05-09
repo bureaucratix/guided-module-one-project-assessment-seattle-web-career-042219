@@ -8,3 +8,5 @@ gem "require_all"
 gem "faker"
 gem 'rest-client'
 gem 'json'
+gem 'tty-prompt'
+gem 'tty-table'
