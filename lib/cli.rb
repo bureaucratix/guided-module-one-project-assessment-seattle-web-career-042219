@@ -1,23 +1,37 @@
-# welcome
-#
-# get name and (potentially current city)
-#   --- check DB to see if name exists, pull profile, or create one
-#
-# prompt of options for CRUD operations
-#   -- check a city by name ((for later: let them add state and parse that out))
-#       ((--check duplicate names, choose which city))
-#       -- after spitting out values, prompt to add to list
-#       -- back to main
-#   -- check my list of cities
-#     -- compare side by side ((filter, sort, etc))
-#     -- delete cities
-#     -- look for more cities to add
-#     -- delete the whole darn list
-#     -- back to main
-#   -- (( preferences update stuff))
-#     -- (())
-#   -- help: display the options
-#   -- quit
+Qol_pref_string_hash = {housing_pref: "Housing",
+ cost_of_living_pref: "Cost of Living",
+startups_pref: "Startups",
+venture_capital_pref: "Venture Capital",
+travel_connectivity_pref: "Travel Connectivity",
+commute_pref: "Commute",
+business_freedom_pref: "Business Freedom",
+safety_pref: "Safety",
+healthcare_pref: "Healthcare",
+education_pref: "Education",
+environmental_quality_pref: "Environmental Quality",
+economy_pref: "Economy",
+taxation_pref: "Taxation",
+internet_access_pref: "Internet Access",
+leisure_and_culture_pref: "Leisure and Culture",
+tolerance_pref: "Tolerance",
+outdoors_pref: "Outdoors"}
+Qol_string_hash = {housing: "Housing",
+cost_of_living: "Cost of Living",
+startups: "Startups",
+venture_capital: "Venture Capital",
+travel_connectivity: "Travel Connectivity",
+commute: "Commute",
+business_freedom: "Business Freedom",
+safety: "Safety",
+healthcare: "Healthcare",
+education: "Education",
+environmental_quality: "Environmental Quality",
+economy: "Economy",
+taxation: "Taxation",
+internet_access: "Internet Access",
+leisure_and_culture: "Leisure and Culture",
+tolerance: "Tolerance",
+outdoors: "Outdoors"}
 
 def welcome
   puts "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~".yellow
@@ -46,6 +60,8 @@ def help
   puts '-- preferences: View and update your personal preferences'
   puts '-- exit: Exit the application'
 end
+
+######################FIND#######################
 
 def get_city_input
   puts 'Enter the name of a city:'.green
@@ -172,6 +188,8 @@ def add_to_list?(city)
   end
 end
 
+#########################LIST#######################
+
 def display_current_list(user)
     puts "\nAlright #{user.name}! Here is your current list of prospective cities:".cyan.underline
      user.get_city_array.each_with_index do |c, index|
@@ -183,7 +201,7 @@ end
 def list_menu(user)
   puts "what would you like to do?".blue.underline
   ###Not working yet
-  puts "-- view:  View a list of your cities, and all the Metrics of each"
+  puts "-- view: View your list of cities sorted by a chosen metric."
   puts "-- remove: Remove a city from your list."
   puts "-- delete: Delete your WHOLE list."
   puts "-- compare: Compare your cities based on a metric of your choice."
@@ -204,6 +222,7 @@ def list_menu(user)
       delete_list(user) if del == true
     when 'compare'
       puts "testing compare"
+      choose_qol_pref(user)
       repeat = true
     when 'back', 'exit', 'quit'
       puts "\nOkay! Going back to the main menu.".green
@@ -213,6 +232,17 @@ def list_menu(user)
     end
     break if repeat == false
   end
+end
+
+def choose_qol_pref(user)
+  prompt = TTY::Prompt.new
+  qol_array = Qol_string_hash.collect do |k,v|
+    v
+  end
+  input = prompt.select("Choose a Quality of Life Metric by which to sort your list of cities", qol_array )
+  metric = Qol_string_hash.key(input)
+  user.sort_cities_by_metric(metric)
+
 end
 
 def remove_from_list_prompt(user)
@@ -313,22 +343,19 @@ def pref_prompt
 end
 
 def pref_update(user)
-  qol_array = [:housing_pref,:cost_of_living_pref,:startups_pref,:venture_capital_pref,:travel_connectivity_pref,:commute_pref,:business_freedom_pref,:safety_pref,:healthcare_pref,:education_pref,:environmental_quality_pref,:economy_pref,:taxation_pref,:internet_access_pref,:leisure_and_culture_pref,:tolerance_pref, :outdoors_pref]
 
   puts "For each of the following Quality of Life metrics, please rate\ntheir importance to you personally when deciding on a new place to live".green
   puts ""
   puts "1 is not at all important,and 5 is absolutely critical".green
   puts ""
 
-  qol_array.each do |q|
+  Qol_pref_string_hash.each do |k, v|
     exit_loop = false
     loop do
-      q2 = q.to_s.split("_")
-      q2.delete("pref")
-      puts "How important is the metric of #{q2.join(" ")} to you, from 1 to 5?".green
+      puts "How important is the metric of #{v} to you, from 1 to 5?".green
       input = gets.chomp
       if input.to_i < 6 && input.to_i > 0
-        user.update_pref(q, input)
+        user.update_pref(k, input)
         break
       elsif input == 'quit' || input == 'exit'
         exit_loop = true
@@ -345,6 +372,7 @@ end
 
 
 def main_menu(user)
+
   loop do
     puts ''
     help()
