@@ -23,7 +23,6 @@ def welcome
   puts "Welcome to [appname]! What's your username?"
 end
 
-# name = method
 def get_name
   gets.chomp
 end
@@ -33,8 +32,9 @@ def look_for_user(name)
   User.find_by name: name
 end
 
+#creates and returns new user
 def new_user(name)
-  User.create name: name
+  User.create(name: name)
 end
 
 def help
@@ -46,50 +46,12 @@ def help
   puts '-- exit: Exit the application'
 end
 
-def main_menu(user)
-  puts
-  help
-  loop do
-    puts 'Please enter an option:'
-    input = gets.chomp
-    puts
-    case input
-    when 'lookup'
-      city_query = get_city_input
-      city_hash = choose_city(city_query)
-      city = get_city_from_api(city_hash) unless city_hash.nil?
-      if city != nil
-        display_ua_and_city_data(city)
-        binding.pry
-        if add_to_list?(city) == true
-          puts "Adding #{city.name} to your list."
-          user.add_city_to_list(city)
-        else
-          puts "Okay, no problem! Returning to the main menu now."
-        end
-      end
-    when 'list'
-      puts 'test'
-    when 'preferences'
-      pref_list(user)
-    when 'help'
-      help
-    when 'exit', 'quit'
-      puts 'Goodbye!'
-      break
-    else
-      puts "#{input} is not a valid option."
-      help
-    end
-  end
-end
-
 def get_city_input
-  # #just pulling first match for now; after, add a clarifying list
   puts 'Enter the name of a city'
   gets.chomp
 end
 
+#takes city name and shows list to choose one city
 def choose_city(city_query)
   response_string = RestClient.get("https://api.teleport.org/api/cities/?search=#{city_query}&embed=city%3Asearch-results%2Fcity%3Aitem%2Fcity%3Aurban_area%2Fua%3Ascores")
   response_hash = JSON.parse(response_string)
@@ -112,6 +74,7 @@ def choose_city(city_query)
   end
 end
 
+#find/creates UrbanArea and City objects/tables
 def get_city_from_api(city_hash)
   city_name = city_hash['_embedded']['city:item']['name']
   city_population = city_hash['_embedded']['city:item']['population']
@@ -209,7 +172,6 @@ def add_to_list?(city)
 end
 
 def display_current_list(user)
-
 end
 
 def pref_list(user)
@@ -245,6 +207,44 @@ def pref_list(user)
 
   QOLS
 
+end
+
+def main_menu(user)
+  puts
+  help
+  loop do
+    puts 'Please enter an option:'
+    input = gets.chomp
+    puts
+    case input
+    when 'lookup'
+      city_query = get_city_input
+      city_hash = choose_city(city_query)
+      city = get_city_from_api(city_hash) unless city_hash.nil?
+      if city != nil
+        display_ua_and_city_data(city)
+        binding.pry
+        if add_to_list?(city) == true
+          puts "Adding #{city.name} to your list."
+          user.add_city_to_list(city)
+        else
+          puts "Okay, no problem! Returning to the main menu now."
+        end
+      end
+    when 'list'
+      puts 'test'
+    when 'preferences'
+      pref_list(user)
+    when 'help'
+      help
+    when 'exit', 'quit'
+      puts 'Goodbye!'
+      break
+    else
+      puts "#{input} is not a valid option."
+      help
+    end
+  end
 end
 
 def run
