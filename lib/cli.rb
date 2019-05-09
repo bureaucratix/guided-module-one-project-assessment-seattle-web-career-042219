@@ -20,7 +20,7 @@
 #   -- quit
 
 def welcome
-  puts "Welcome to [appname]! What's your username?"
+  puts "Welcome to City Quality of Life (CQL)! What's your username?"
 end
 
 def get_name
@@ -183,7 +183,7 @@ def pref_list(user)
       3 => "Somewhat important",
       4 => "Very important",
       5 => "Absolutely Vital!"}
-
+# binding.pry
   print <<-QOLS
             Your Quality of Life Preferences
   Here are your current preferences for our QoL Metrics:
@@ -206,8 +206,58 @@ def pref_list(user)
     Outdoors:                #{pref_text[user.outdoors_pref]}
 
   QOLS
-
 end
+
+def pref_prompt
+  input = nil
+  puts "What would you like to do?"
+  puts "-- update: Update your preferences"
+  puts "-- back: go back to the main menu"
+  puts ""
+  loop do
+    input = gets.chomp
+    if input == 'update'
+      break
+    elsif input == 'back' || input == 'quit' || input == 'exit'
+      break
+    else
+      puts "Invalid input"
+    end
+  end
+  return input
+end
+
+def pref_update(user)
+  qol_array = [:housing_pref,:cost_of_living_pref,:startups_pref,:venture_capital_pref,:travel_connectivity_pref,:commute_pref,:business_freedom_pref,:safety_pref,:healthcare_pref,:education_pref,:environmental_quality_pref,:economy_pref,:taxation_pref,:internet_access_pref,:leisure_and_culture_pref,:tolerance_pref, :outdoors_pref]
+
+  puts "For each of the following Quality of Life metrics, please rate\ntheir importance to you personally when deciding on a new place to live"
+  puts ""
+  puts "1 is not at all important,and 5 is absolutely critical"
+  puts ""
+
+  qol_array.each do |q|
+    exit_loop = false
+    loop do
+      q2 = q.to_s.split("_")
+      q2.delete("pref")
+      puts "How important is the metric of #{q2.join(" ")} to you, from 1 to 5?"
+      input = gets.chomp
+      if input.to_i < 6 && input.to_i > 0
+        user.update_pref(q, input)
+        break
+      elsif input == 'quit' || input == 'exit'
+        exit_loop = true
+        break
+      else
+        puts "invalid input"
+      end
+    end
+    break if exit_loop == true
+  end
+  user = User.find_by(name: user.name)
+  return user
+end
+
 
 def main_menu(user)
   puts
@@ -215,7 +265,7 @@ def main_menu(user)
   loop do
     puts 'Please enter an option:'
     input = gets.chomp
-    puts
+    puts ""
     case input
     when 'lookup'
       city_query = get_city_input
@@ -223,26 +273,33 @@ def main_menu(user)
       city = get_city_from_api(city_hash) unless city_hash.nil?
       if city != nil
         display_ua_and_city_data(city)
-        binding.pry
         if add_to_list?(city) == true
           puts "Adding #{city.name} to your list."
           user.add_city_to_list(city)
+          puts ""
+          help()
         else
           puts "Okay, no problem! Returning to the main menu now."
+          puts ""
+          help()
         end
       end
     when 'list'
       puts 'test'
     when 'preferences'
       pref_list(user)
+      input = pref_prompt()
+      user = pref_update(user) if input == 'update'
+      puts ""
+      help()
     when 'help'
-      help
+      help()
     when 'exit', 'quit'
       puts 'Goodbye!'
       break
     else
       puts "#{input} is not a valid option."
-      help
+      help()
     end
   end
 end
@@ -256,7 +313,7 @@ def run
     puts "Welcome back #{name}!"
   else
     user = new_user(name)
-    puts "Hello #{name}! Welcome to [appname]!"
+    puts "Hello #{name}! Welcome to City Quality of Life (CQL)!"
   end
   main_menu(user)
 end
