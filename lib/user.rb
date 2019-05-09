@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
   User.update(self.id, preference_name => new_value.to_i)
  end
 
+ def get_city_array
+   City.left_outer_joins(:user_cities).select('cities.name').where('user_cities.user_id = ?', self.id)
+ end
+
 end

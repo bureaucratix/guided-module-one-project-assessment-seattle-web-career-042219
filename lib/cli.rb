@@ -172,6 +172,19 @@ def add_to_list?(city)
 end
 
 def display_current_list(user)
+   user.get_city_array.each do |c|
+     puts c.name
+   end
+end
+
+def list_menu(user)
+  puts "what would you like to do?"
+  puts "-- remove: Remove a city from your list."
+  puts "-- delete: Delete your WHOLE list."
+  puts "-- compare: Compare your cities based on a metric of your choice."
+  puts "-- back: Go back to the main menu."
+
+  gets.chomp
 end
 
 def pref_list(user)
@@ -285,7 +298,8 @@ def main_menu(user)
         end
       end
     when 'list'
-      puts 'test'
+      display_current_list(user)
+      list_menu(user)
     when 'preferences'
       pref_list(user)
       input = pref_prompt()
