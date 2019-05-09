@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_08_165648) do
+ActiveRecord::Schema.define(version: 2019_05_09_161134) do
 
   create_table "cities", force: :cascade do |t|
     t.string "name"
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 2019_05_08_165648) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "outdoors"
     t.integer "housing_pref"
     t.integer "cost_of_living_pref"
     t.integer "startups_pref"

@@ -6,4 +6,8 @@ class User < ActiveRecord::Base
   UserCity.create(user_id: self.id, city_id: city.id)
  end
 
+ def update_pref(preference_name, new_value)
+  User.update(self.id, preference_name => new_value.to_i)
+ end
+
 end
