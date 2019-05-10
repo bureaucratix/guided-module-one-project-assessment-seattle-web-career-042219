@@ -201,10 +201,9 @@ end
 def list_menu(user)
   puts "what would you like to do?".blue.underline
   ###Not working yet
-  puts "-- view: View your list of cities sorted by a chosen metric."
+  puts "-- compare: Compare your cities based on a metric of your choice."
   puts "-- remove: Remove a city from your list."
   puts "-- delete: Delete your WHOLE list."
-  puts "-- compare: Compare your cities based on a metric of your choice."
   puts "-- back: Go back to the main menu."
 
   loop do
@@ -212,9 +211,6 @@ def list_menu(user)
     repeat = false
     input = gets.chomp
     case input
-    when 'view'
-      puts 'Still working on the View feature!'
-      repeat = true
     when 'remove'
       remove_from_list_prompt(user)
     when 'delete'
