@@ -55,15 +55,12 @@ Users can choose to add the city to their short list to save for later!
 
 Users can view their current short list of cities they saved at any time by typing "list" from the main menu.
 
-<!-- #UPDATE THIS IMAGE!!!! -->
-![list] (add image)
+Within this features users can compare the cities they have saved in their short list by each of the 17 QOL metrics.
 
-Within this feature, users can individual cities or the entire short list.
+![list] (images/list.png)
+![list_2] (images/list_2.png)
 
-Users can also sort cities in the short list based on any QOL metric.
-
-<!-- #UPDATE THIS IMAGE!!!! -->
-![list] (add image of sort)
+Users can also remove individual cities from their list of saved cities or they can delete the entire short list.
 
 ### navigating preferences
 
@@ -83,6 +80,7 @@ These are the key features and functionality built into the program:
 * Search for cities by name and view quality of life metrics--search results return potential matches, users can confirm intended city by: city name and state.
 * Ability to add cities to a user's short list of potential cities they are considering.
 * Ability to view city short list, delete individual cities, or delete the entire list.
+* Ability to compare cities that they have saved on each of the 17 quality of life metrics.
 * Ability to add, view, and update user preferences for all the quality of life metrics in their profile.
 
 ## Demo
