@@ -200,7 +200,6 @@ end
 
 def list_menu(user)
   puts "what would you like to do?".blue.underline
-  ###Not working yet
   puts "-- compare: Compare your cities based on a metric of your choice."
   puts "-- remove: Remove a city from your list."
   puts "-- delete: Delete your WHOLE list."
@@ -217,7 +216,6 @@ def list_menu(user)
       del = delete_prompt()
       delete_list(user) if del == true
     when 'compare'
-      puts "testing compare"
       choose_qol_pref(user)
       repeat = true
     when 'back', 'exit', 'quit'
@@ -235,7 +233,7 @@ def choose_qol_pref(user)
   qol_array = Qol_string_hash.collect do |k,v|
     v
   end
-  input = prompt.select("Choose a Quality of Life Metric by which to sort your list of cities", qol_array )
+  input = prompt.select("\nChoose a Quality of Life Metric by which to sort your list of cities", qol_array )
   metric = Qol_string_hash.key(input)
   user.sort_cities_by_metric(metric)
 
