@@ -85,7 +85,7 @@ These are the key features and functionality built into the program:
 
 ## Demo
 
-< insert video >
+https://youtu.be/g39hqQYoLto
 
 
 ## Credits
@@ -94,11 +94,19 @@ Project by Alex Kitelinger and Ella Taber
 source "https://rubygems.org"
 
 gem 'sinatra-activerecord'
+
 gem 'sqlite3'
+
 gem 'pry'
+
 gem 'rest-client'
+
 gem 'json'
+
 gem "require_all"
+
 gem 'colorize'
+
 gem 'tty-prompt'
+
 gem 'tty-table'
