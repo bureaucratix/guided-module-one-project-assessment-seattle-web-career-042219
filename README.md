@@ -58,7 +58,7 @@ Users can view their current short list of cities they saved at any time by typi
 Within this features users can compare the cities they have saved in their short list by each of the 17 QOL metrics.
 
  ![list](images/list.png)
- 
+
 
  ![list_2](images/list_2.png)
 
@@ -105,7 +105,7 @@ gem 'rest-client'
 
 gem 'json'
 
-gem "require_all"
+gem 'require_all'
 
 gem 'colorize'
 

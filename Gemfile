@@ -5,10 +5,8 @@ gem "sinatra-activerecord"
 gem "sqlite3"
 gem "pry"
 gem "require_all"
-gem "faker"
 gem 'rest-client'
 gem 'json'
 gem 'colorize'
 gem 'tty-prompt'
 gem 'tty-table'
-
