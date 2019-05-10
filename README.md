@@ -57,8 +57,10 @@ Users can view their current short list of cities they saved at any time by typi
 
 Within this features users can compare the cities they have saved in their short list by each of the 17 QOL metrics.
 
-![list] (images/list.png)
-![list_2] (images/list_2.png)
+ ![list](images/list.png)
+ 
+
+ ![list_2](images/list_2.png)
 
 Users can also remove individual cities from their list of saved cities or they can delete the entire short list.
 
